@@ -53,6 +53,7 @@ export function getBook(id) {
 export function addBook(book) {
   const id = Math.max(0, ...store.books.map((book) => book.id)) + 1;
   store.books.push({ id, ...book });
+  return id;
 }
 
 /**

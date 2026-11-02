@@ -16,12 +16,14 @@ export default function ({ request, reply, user }) {
       // Jump back to the updated book, so you can see the change.
       return reply.redirect(`/admin?updated=${id}#book-${id}`, 303);
     } else if (form.title?.trim() && form.author?.trim()) {
-      addBook({
+      const id = addBook({
         title: form.title.trim(),
         author: form.author.trim(),
         isbn: form.isbn?.replaceAll("-", "").trim() ?? "",
         status: form.status in STATUS ? form.status : "to-read",
       });
+      // Jump to the new book, so you can see it was added.
+      return reply.redirect(`/admin?added=${id}#book-${id}`, 303);
     } else {
       reply.status(400);
       return <AdminPage user={user} error="Please enter a title and an author." form={form} />;
@@ -31,13 +33,19 @@ export default function ({ request, reply, user }) {
     return reply.redirect("/admin", 303);
   }
 
-  return <AdminPage user={user} updated={Number(request.query["updated"])} />;
+  return (
+    <AdminPage
+      user={user}
+      updated={Number(request.query["updated"])}
+      added={Number(request.query["added"])}
+    />
+  );
 }
 
 /**
- * @param {{ user: string, error?: string, form?: Record<string, string>, updated?: number }} props
+ * @param {{ user: string, error?: string, form?: Record<string, string>, updated?: number, added?: number }} props
  */
-function AdminPage({ user, error, form = {}, updated }) {
+function AdminPage({ user, error, form = {}, updated, added }) {
   const books = getBooks();
 
   return (
@@ -72,6 +80,7 @@ function AdminPage({ user, error, form = {}, updated }) {
             <span class="title">{book.title}</span>
             <div class="actions">
               {book.id === updated && <span class="saved">✓ Saved</span>}
+              {book.id === added && <span class="saved">✓ Added</span>}
               <form method="post">
                 <input type="hidden" name="action" value="status" />
                 <input type="hidden" name="id" value={book.id} />
