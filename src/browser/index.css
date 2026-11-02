@@ -185,18 +185,60 @@ header nav a[aria-current="page"],
   box-shadow: 0 0.5rem 1.5rem rgb(0 0 0 / 0.2);
 }
 
-.book dl {
-  display: grid;
-  grid-template-columns: auto 1fr;
-  gap: 0.25rem 1rem;
+/* Skeleton shown while the cover image loads: a fake book with spine,
+   title and author lines, and a diagonal shine sweeping across it. */
+.cover {
+  --bar: color-mix(in srgb, var(--surface) 55%, transparent);
+  /* 2:3 while loading, then the cover's own proportions */
+  aspect-ratio: auto 2 / 3;
+  align-self: flex-start;
+  background:
+    linear-gradient(110deg, transparent 40%, rgb(255 255 255 / 0.35) 50%, transparent 60%)
+      100% 0 / 250% 100% no-repeat,
+    linear-gradient(var(--bar), var(--bar)) 50% 32% / 70% 6% no-repeat,
+    linear-gradient(var(--bar), var(--bar)) 50% 41% / 50% 6% no-repeat,
+    linear-gradient(var(--bar), var(--bar)) 50% 83% / 40% 4% no-repeat,
+    linear-gradient(90deg, rgb(0 0 0 / 0.18) 0 6%, rgb(255 255 255 / 0.12) 6% 7%, transparent 7%),
+    linear-gradient(
+      160deg,
+      color-mix(in srgb, var(--accent) 35%, var(--surface)),
+      color-mix(in srgb, var(--accent) 12%, var(--surface))
+    );
+  animation:
+    cover-shine 1.6s ease-in-out infinite,
+    cover-float 3s ease-in-out infinite;
 }
 
-.book dt {
-  color: var(--muted);
+.cover.loaded {
+  background: none;
+  animation: cover-reveal 0.5s ease-out;
 }
 
-.book dd {
-  margin: 0;
+@keyframes cover-shine {
+  to {
+    background-position: 0 0, 50% 32%, 50% 41%, 50% 83%, 0 0, 0 0;
+  }
+}
+
+@keyframes cover-float {
+  50% {
+    transform: translateY(-4px) rotate(-1deg);
+  }
+}
+
+@keyframes cover-reveal {
+  from {
+    opacity: 0.3;
+    filter: blur(8px);
+    transform: scale(0.96);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cover,
+  .cover.loaded {
+    animation: none;
+  }
 }
 
 /* Forms */

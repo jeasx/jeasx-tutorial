@@ -18,7 +18,6 @@ export default function ({ request }) {
     <Layout title={book.title}>
       <a href="/">&laquo; All books</a>
       <article class="book">
-        <img src={`https://covers.openlibrary.org/b/isbn/${book.isbn}-M.jpg`} alt="" width="180" />
         <div>
           <h1 style={`view-transition-name: book-${book.id}`}>{book.title}</h1>
           <p>
@@ -26,6 +25,7 @@ export default function ({ request }) {
           </p>
           <BookDetails isbn={book.isbn} />
         </div>
+        <img src={`https://covers.openlibrary.org/b/isbn/${book.isbn}-M.jpg`} alt="" width="180" class="cover" />
       </article>
     </Layout>
   );
