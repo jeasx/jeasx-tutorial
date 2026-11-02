@@ -69,7 +69,7 @@ export function deleteBook(id) {
  */
 export function updateStatus(id, status) {
   const book = getBook(id);
-  if (book && status in STATUS) {
+  if (book && Object.hasOwn(STATUS, status)) {
     book.status = status;
   }
 }

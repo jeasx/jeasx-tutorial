@@ -6,7 +6,7 @@ import { addBook, deleteBook, getBooks, STATUS, updateStatus } from "../lib/book
  */
 export default function ({ request, reply, user }) {
   if (request.method === "POST") {
-    const form = /** @type {Record<string, string>} */ (request.body);
+    const form = /** @type {Record<string, string>} */ (request.body ?? {});
 
     if (form.action === "delete") {
       deleteBook(Number(form.id));
@@ -19,8 +19,9 @@ export default function ({ request, reply, user }) {
       const id = addBook({
         title: form.title.trim(),
         author: form.author.trim(),
-        isbn: form.isbn?.replaceAll("-", "").trim() ?? "",
-        status: form.status in STATUS ? form.status : "to-read",
+        // Keep only characters that can appear in an ISBN.
+        isbn: form.isbn?.replace(/[^0-9X]/gi, "").toUpperCase() ?? "",
+        status: Object.hasOwn(STATUS, form.status) ? form.status : "to-read",
       });
       // Jump to the new book, so you can see it was added.
       return reply.redirect(`/admin?added=${id}#book-${id}`, 303);

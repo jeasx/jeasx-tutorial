@@ -25,7 +25,7 @@ export default function ({ request }) {
           </p>
           <BookDetails isbn={book.isbn} />
         </div>
-        <img src={`https://covers.openlibrary.org/b/isbn/${book.isbn}-M.jpg`} alt="" width="180" class="cover" />
+        <img src={`https://covers.openlibrary.org/b/isbn/${encodeURIComponent(book.isbn)}-M.jpg`} alt="" width="180" class="cover" />
       </article>
     </Layout>
   );
@@ -37,7 +37,7 @@ export default function ({ request }) {
 async function BookDetails({ isbn }) {
   try {
     const response = await fetch(
-      `https://openlibrary.org/search.json?isbn=${isbn}&fields=first_publish_year,number_of_pages_median,subject&limit=1`,
+      `https://openlibrary.org/search.json?isbn=${encodeURIComponent(isbn)}&fields=first_publish_year,number_of_pages_median,subject&limit=1`,
     );
     const [details] = (await response.json()).docs;
     return (
