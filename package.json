@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "@fastify/cookie": "11.1.5",
-    "jeasx": "3.0.2"
+    "jeasx": "3.1.0"
   },
   "allowScripts": {
     "esbuild": true
