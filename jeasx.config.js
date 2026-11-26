@@ -20,8 +20,6 @@ export default {
   ESBUILD_BROWSER_OPTIONS: () => ({
     // Emit fonts as files with content-hashed names (see `src/browser/index.css`).
     loader: { ".woff2": "file" },
-    // Target environment for the generated JavaScript / CSS code.
-    target: ["chrome130", "edge130", "firefox130", "safari18"],
   }),
 
   /** @type {(fastify: import("fastify").FastifyInstance) => import("fastify").FastifyInstance} */
